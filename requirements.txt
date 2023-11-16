@@ -1,23 +1,85 @@
-numpy~=1.19.5
-tqdm>=4.45.0
+# TODO: For now, commented out packages not in the thor requirements.txt. Find matching versions of them
+
+--find-links https://storage.googleapis.com/jax-releases/libtpu_releases.html
+--find-links https://storage.googleapis.com/jax-releases/jax_releases.html
+
+numpy==1.22.2
+    # via
+    #   chex
+    #   dm-haiku
+    #   h5py
+    #   jax
+    #   jaxlib
+    #   jmp
+    #   keras-preprocessing
+    #   onnx
+    #   onnxconverter-common
+    #   opt-einsum
+    #   optax
+    #   pandas
+    #   ray
+    #   scipy
+    #   tensorboard
+    #   tensorflow-cpu
+    #   tf2onnx
+    #   transformers
+tqdm==4.45.0
+    # via
+    #   -r requirements.in
+    #   huggingface-hub
+    #   sacremoses
+    #   transformers
 wandb>=0.11.2
-einops~=0.3.0
-requests~=2.25.1
-fabric~=2.6.0
-optax==0.0.9
-dm-haiku==0.0.5
-git+https://github.com/EleutherAI/lm-evaluation-harness/
-ray[default]==1.4.1
-jax~=0.2.12
-Flask~=1.1.2
-cloudpickle~=1.3.0
-tensorflow-cpu~=2.6.0
+einops==0.3.2
+    # via -r requirements.in
+requests==2.27.1
+    # via
+    #   bravado
+    #   docker
+    #   google-api-core
+    #   google-cloud-storage
+    #   huggingface-hub
+    #   jax
+    #   kubernetes
+    #   neptune-client
+    #   ray
+    #   requests-oauthlib
+    #   tensorboard
+    #   tf2onnx
+    #   transformers
+fabric==2.6.0
+    # via mrunner
+optax==0.0.6
+    # via -r requirements.in
+dm-haiku==0.0.6
+    # via -r requirements.in
+# git+https://github.com/EleutherAI/lm-evaluation-harness/@v0.2.0
+ray[default]==1.5.1
+    # via -r requirements.in
+jax[tpu]==0.3.14 ## to match with jaxlib 0.3.14
+    # via
+    #   -r requirements.in
+    #   chex
+    #   optax
+# Flask~=1.1.2
+cloudpickle==2.0.0
+    # via mrunner
+tensorflow-cpu==2.8.0
+    # via
+    #   -r requirements.in
+    #   transformers
 google-cloud-storage~=1.36.2
-transformers
-smart_open[gcs]
-func_timeout
-ftfy
-fastapi
-uvicorn
-lm_dataformat
-pathy
+transformers[tf-cpu]==4.16.2
+    # via -r requirements.in
+smart-open[gcs]==5.2.1
+    # via -r requirements.in
+func-timeout==4.3.5
+    # via -r requirements.in
+ftfy==6.1.1
+    # via -r requirements.in
+fastapi==0.74.1
+    # via -r requirements.in
+uvicorn==0.17.5
+    # via -r requirements.in
+lm-dataformat==0.0.20
+# pathy
