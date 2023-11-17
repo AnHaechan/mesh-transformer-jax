@@ -36,7 +36,10 @@ if __name__ == "__main__":
     assert cores_per_replica <= 8
 
     bucket = params["bucket"]
-    model_dir = params["model_dir"]
+
+    # FIXED: model exists in the base directory of bucket...
+    # model_dir = params["model_dir"]
+
     layers = params["layers"]
     d_model = params["d_model"]
     n_heads = params["n_heads"]
@@ -63,18 +66,21 @@ if __name__ == "__main__":
     mesh_shape = (jax.device_count() // cores_per_replica, cores_per_replica)
     devices = np.array(jax.devices()).reshape(mesh_shape)
 
-    with open(f"gs://{bucket}/{model_dir}/meta.json", "r") as f:
+    # FIXED: model exists in the base directory of bucket...
+    with open(f"gs://{bucket}/meta.json", "r") as f:
         meta = json.load(f)
 
     ckpt_step = meta["checkpoints"][-1]
     print(f"using checkpoint {ckpt_step}")
 
     total_batch = per_replica_batch * jax.device_count() // cores_per_replica
-    with jax.experimental.maps.mesh(devices, ('dp', 'mp')):
+    with jax.experimental.maps.Mesh(devices, ('dp', 'mp')):
         network = CausalTransformer(params)
 
         start = time.time()
-        network.state = read_ckpt(network.state, f"gs://{bucket}/{model_dir}/step_{ckpt_step}/", devices.shape[1])
+
+        # FIXED: model exists in the base directory of bucket...
+        network.state = read_ckpt(network.state, f"gs://{bucket}/step_{ckpt_step}/", devices.shape[1])
         print(f"network loaded in {time.time() - start:.06}s")
 
         local_shards = max(jax.local_device_count() // mesh_shape[1], 1)
@@ -96,8 +102,8 @@ if __name__ == "__main__":
             batched_tokens = np.array([padded_tokens] * total_batch)
             length = np.ones(total_batch, dtype=np.uint32) * len(tokens)
 
-            output = network.generate(batched_tokens, length, 512, {"top_p": np.ones(total_batch) * 0.9,
-                                                                    "temp": np.ones(total_batch) * 0.75})
+            output = network.generate(batched_tokens, length, 128, {"top_p": np.ones(total_batch) * 0.9,
+                                                                    "temp": np.ones(total_batch) * 0.25})
 
             for idx, o in enumerate(output[1][0][:, :, 0]):
                 print(f"sample {idx}: {repr(tokenizer.decode(o))}")
