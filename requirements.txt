@@ -82,4 +82,5 @@ fastapi==0.74.1
 uvicorn==0.17.5
     # via -r requirements.in
 lm-dataformat==0.0.20
-# pathy
+pathy
+torch

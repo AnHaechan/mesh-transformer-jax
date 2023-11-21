@@ -21,8 +21,8 @@
 
   "tpu_size": 8,
 
-  "bucket": "thor-gpt-j-6b",
-  "model_dir": "mesh_example",
+  "bucket": "thor-gpt-j-6b-eu",
+  "model_dir": "thor-gpt-j-6b",
 
   "train_set": "pisa.train.index",
   "val_set": {
