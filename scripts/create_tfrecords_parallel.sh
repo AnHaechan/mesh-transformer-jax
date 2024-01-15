@@ -8,19 +8,21 @@ if [ ! -d "tfrecord" ]; then
     mkdir "tfrecord"
 fi
 
-max_processes=2
+#max_processes=2
 
-for i in {0..199} # max: 999 ; divide by regions
+for i in {0..129} # max: 999 ; divide by regions
 do
     # filter already created ones
-    if [ $i -le 31 ]; then
+    if [ $i -le 34 ]; then
         continue
     fi 
 
-    perform_task $i &
+    perform_task $i
+
+    # perform_task $i &
     
-    # Check the number of background processes
-    if [[ $(jobs -p | wc -l) -ge $max_processes ]]; then
-        wait  # Wait for the background processes to finish before starting new ones
-    fi
+    # # Check the number of background processes
+    # if [[ $(jobs -p | wc -l) -ge $max_processes ]]; then
+    #     wait  # Wait for the background processes to finish before starting new ones
+    # fi
 done 
