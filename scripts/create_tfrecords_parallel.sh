@@ -1,13 +1,22 @@
 perform_task() {
     echo $i
     # sleep 5
-    sudo python3 create_finetune_tfrecords.py /mnt/disks/persist2/pile/raw_txt/train/shard$i pile_gitarx_shard$i --output-dir /mnt/disks/persist2/pile/tfrecord/train
+    sudo python3 create_finetune_tfrecords.py /mnt/disks/persist2/pile/raw_txt/train/shard$i pile_gitarx_shard$i --output-dir /home/haechan.an/mesh-transformer-jax/tfrecord
 }
 
-max_processes=32
+if [ ! -d "tfrecord" ]; then
+    mkdir "tfrecord"
+fi
 
-for i in {1..999}
+max_processes=2
+
+for i in {0..199} # max: 999 ; divide by regions
 do
+    # filter already created ones
+    if [ $i -le 31 ]; then
+        continue
+    fi 
+
     perform_task $i &
     
     # Check the number of background processes
