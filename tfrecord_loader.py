@@ -75,7 +75,7 @@ class TFRecordLoader:
 
 
 class TFRecordNewInputs(TFRecordLoader):
-    def __init__(self, index_fname, batch_size, sample_size, restore_state=None):
+    def __init__(self, index_fname, batch_size, restore_state=None):
         def tf_parse(example_proto):
             features = {
                 "text": tf.io.VarLenFeature(tf.int64)
@@ -149,9 +149,18 @@ if __name__ == "__main__":
     #     print(i)
     #     break
 
-    d = TFRecordWIT("data/wit_dalle.train.index", (8, 32))
-    for idx, i in enumerate(d.sample_once()):
-        print(i)
-        break
+    # d = TFRecordWIT("data/wit_dalle.train.index", (8, 32))
+    # for idx, i in enumerate(d.sample_once()):
+    #     print(i)
+    #     break
 
-    print()
+    val_set = TFRecordNewInputs(
+        index_fname=f"data/pile_gitarx.val.index",
+        batch_size=(1,),
+    )
+    tokenizer = GPT2TokenizerFast.from_pretrained('gpt2')
+
+    for sample, idx in zip(val_set.sample_once(), range(1)):
+        print(len(sample[0]))
+        print(tokenizer.decode(sample[0]))
+        break

@@ -1,0 +1,49 @@
+{
+  "layers": 24,
+  "d_model": 1536,
+  "n_heads": 24,
+  "n_vocab": 50400,
+  "norm": "layernorm",
+  "pe": "rotary",
+  "pe_rotary_dims": 64,
+
+  "seq": 2048,
+  "cores_per_replica": 8,
+  "per_replica_batch": 1,
+  "gradient_accumulation_steps": 32,
+
+  "warmup_steps": 3000,
+  "anneal_steps": 197000,
+  "lr": 0.0002,
+  "end_lr": 1.2e-5,
+  "weight_decay": 0.05,
+  "total_steps": 200000,
+
+  "tpu_size": 8,
+
+  "bucket": "thor-gpt-j-6b-eu",
+  "model_dir": "thor-pretrain-scratch-700m",
+
+  "train_set": "pile_gitarx.train.index",
+  "val_set": {
+    "pisa": "pile_gitarx.val.index"
+  },
+
+  "eval_harness_tasks": [
+    "lambada",
+    "piqa",
+    "hellaswag",
+    "winogrande",
+    "mathqa",
+    "pubmedqa"
+  ],
+
+  "val_batches": 40938,
+  "val_every": 5000,
+  "ckpt_every": 5000,
+  "keep_every": 5000,
+
+  "name": "pile_gitarx_pretrain",
+  "wandb_project": "mesh-transformer-jax",
+  "comment": ""
+}

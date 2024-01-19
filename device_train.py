@@ -237,7 +237,7 @@ if __name__ == "__main__":
                                       batch_size=(
                                           gradient_accumulation_steps,
                                           per_replica_batch * tpu_size // cores_per_replica),
-                                      sample_size=params['seq'],
+                                      #  sample_size=params['seq'], # default 2049
                                       restore_state=train_loader)
 
     global_val_batch = per_replica_batch * tpu_size // cores_per_replica
@@ -246,7 +246,7 @@ if __name__ == "__main__":
 
     for k, v in params["val_set"].items():
         val_sets[k] = TFRecordNewInputs(
-            f"data/{v}", batch_size=(global_val_batch,), sample_size=seq
+            f"data/{v}", batch_size=(global_val_batch,), # sample_size=seq # default 2049
         )
 
     # tok/sec metrics
@@ -254,7 +254,7 @@ if __name__ == "__main__":
     tokens_per_step = params['seq'] * sequences_per_step
 
     # load + run
-    with jax.experimental.maps.mesh(devices, ('dp', 'mp')):
+    with jax.experimental.maps.Mesh(devices, ('dp', 'mp')):
         print("initializing network")
         network = CausalTransformer(params)
 
